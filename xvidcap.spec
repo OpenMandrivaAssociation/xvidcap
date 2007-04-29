@@ -1,16 +1,15 @@
 %define name	xvidcap
-%define version	1.1.4
-%define release %mkrel 3
+%define version	1.1.5
+%define release %mkrel 1
 
-Name: 	 	%{name}
-Summary: 	Screen capture video recorder
-Version: 	%{version}
-Release: 	%{release}
-
-Source:		%{name}-%{version}.tar.bz2
-Patch0:		xvidcap-1.1.4-docbook.patch
-Patch1:		xvidcap-1.1.4-asneeded.patch
-Patch2:		xvidcap-1.1.4-nawk.patch
+Name:		%{name}
+Summary:	Screen capture video recorder
+Version:	%{version}
+Release:	%{release}
+Source:		http://downloads.sourceforge.net/xvidcap/%{name}-%{version}.tar.bz2
+Patch0:		xvidcap-1.1.5-docbook.patch
+Patch2:		xvidcap-1.1.5-nawk.patch
+Patch3:		%{name}-1.1.5-gnome_ui.c.patch
 URL:		http://xvidcap.sourceforge.net/
 License:	GPL
 Group:		Video
@@ -24,10 +23,10 @@ BuildRequires:	scrollkeeper
 BuildRequires:	perl-XML-Parser
 Requires(post): scrollkeeper
 Requires(postun): scrollkeeper
-Requires: mplayer
-Requires: mencoder
-Requires: ffmpeg
-Requires: ImageMagick
+Requires:	mplayer
+Requires:	mencoder
+Requires:	ffmpeg
+Requires:	ImageMagick
 
 %description
 xvidcap is a screen capture enabling you to capture videos off your X-Window
@@ -36,42 +35,40 @@ standards-based alternative to tools like Lotus ScreenCam.
 
 %prep
 %setup -q
-%patch0 -p1 -b .docbook
-%patch1 -p1 -b .asneeded
-%patch2 -p1 -b .fixawk
+%patch0 -p0 -b .docbook
+%patch2 -p0 -b .fixawk
+%patch3 -p0 -b .gnomeui
 
-aclocal && autoconf && automake -a -c
+#aclocal && autoconf && automake -a -c
+sh ./autogen.sh
 
 %build
 %configure2_5x --with-forced-embedded-ffmpeg
 %make
 
 %install
-rm -rf $RPM_BUILD_ROOT %name.lang
-%makeinstall
+rm -rf %{buildroot} %{name}.lang
 
-chmod 755 %buildroot/%{_datadir}/%{name}/ppm2mpeg.sh
-ln -s %{_datadir}/%{name}/ppm2mpeg.sh $RPM_BUILD_ROOT%{_bindir}/ppm2mpeg.sh
+%makeinstall_std
 
-rm -fr $RPM_BUILD_ROOT/%_docdir
-%find_lang %name --with-gnome
-for omf in %buildroot%_datadir/omf/*/*-??.omf;do
-echo "%lang($(basename $omf|sed -e s/.*-// -e s/.omf//)) $(echo $omf|sed s!%buildroot!!)" >> %name.lang
+chmod 755 %{buildroot}%{_datadir}/%{name}/ppm2mpeg.sh
+ln -s %{_datadir}/%{name}/ppm2mpeg.sh %{buildroot}%{_bindir}/ppm2mpeg.sh
+
+rm -fr %{buildroot}/%{_docdir}
+
+for omf in %{buildroot}%{_datadir}/omf/*/*-??.omf;do
+echo "%lang($(basename $omf|sed -e s/.*-// -e s/.omf//)) $(echo $omf|sed s!%{buildroot}!!)" >> %{name}.lang
 done
 
-#menu
-mkdir -p $RPM_BUILD_ROOT%{_menudir}
-cat << EOF > $RPM_BUILD_ROOT%{_menudir}/%{name}
-?package(%{name}): command="xvidcap" icon="video_section.png" needs="x11" title="XVidCap" longtitle="Screen Capture Video Recorder" section="Multimedia/Video" xdg="true"
-EOF
 desktop-file-install --vendor="" \
   --remove-category="Application" \
   --add-category="X-MandrivaLinux-Multimedia-Video" \
-  --dir $RPM_BUILD_ROOT%{_datadir}/applications $RPM_BUILD_ROOT%{_datadir}/applications/*
+  --dir %{buildroot}%{_datadir}/applications %{buildroot}%{_datadir}/applications/*
 
+%find_lang %{name} --with-gnome
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
 %post
 %update_menus
@@ -81,20 +78,17 @@ rm -rf $RPM_BUILD_ROOT
 %clean_menus
 %clean_scrollkeeper
 
-%files -f %name.lang
+%files -f %{name}.lang
 %defattr(-,root,root)
 %doc AUTHORS ChangeLog COPYING NEWS README
-%{_bindir}/%name
+%{_bindir}/%{name}
 %{_bindir}/ppm2mpeg.sh
 %{_mandir}/man1/*
 %lang(de) %{_mandir}/de/man1/*
 %lang(es) %{_mandir}/es/man1/*
 %lang(it) %{_mandir}/it/man1/*
-%_datadir/applications/xvidcap.desktop
-%_datadir/%name
+%{_datadir}/applications/xvidcap.desktop
+%{_datadir}/%{name}
 %dir %{_datadir}/omf/*
 %{_datadir}/omf/*/*-C.omf
-%_datadir/pixmaps/%name.png
-%{_menudir}/%name
-
-
+%{_datadir}/pixmaps/%{name}.png
