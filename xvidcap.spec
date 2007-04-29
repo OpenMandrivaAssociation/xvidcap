@@ -39,11 +39,11 @@ standards-based alternative to tools like Lotus ScreenCam.
 %patch2 -p0 -b .fixawk
 %patch3 -p0 -b .gnomeui
 
-#aclocal && autoconf && automake -a -c
 sh ./autogen.sh
 
 %build
 %configure2_5x --with-forced-embedded-ffmpeg
+
 %make
 
 %install
@@ -90,5 +90,5 @@ rm -rf %{buildroot}
 %{_datadir}/applications/xvidcap.desktop
 %{_datadir}/%{name}
 %dir %{_datadir}/omf/*
-%{_datadir}/omf/*/*-C.omf
+%{_datadir}/omf/*/*.omf
 %{_datadir}/pixmaps/%{name}.png
