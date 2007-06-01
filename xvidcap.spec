@@ -1,5 +1,5 @@
 %define name	xvidcap
-%define version	1.1.5
+%define version	1.1.6
 %define release %mkrel 1
 
 Name:		%{name}
@@ -9,7 +9,6 @@ Release:	%{release}
 Source:		http://downloads.sourceforge.net/xvidcap/%{name}-%{version}.tar.bz2
 Patch0:		xvidcap-1.1.5-docbook.patch
 Patch2:		xvidcap-1.1.5-nawk.patch
-Patch3:		%{name}-1.1.5-gnome_ui.c.patch
 URL:		http://xvidcap.sourceforge.net/
 License:	GPL
 Group:		Video
@@ -26,7 +25,7 @@ Requires(postun): scrollkeeper
 Requires:	mplayer
 Requires:	mencoder
 Requires:	ffmpeg
-Requires:	ImageMagick
+Requires:	imagemagick
 
 %description
 xvidcap is a screen capture enabling you to capture videos off your X-Window
@@ -37,12 +36,12 @@ standards-based alternative to tools like Lotus ScreenCam.
 %setup -q
 %patch0 -p0 -b .docbook
 %patch2 -p0 -b .fixawk
-%patch3 -p0 -b .gnomeui
 
 sh ./autogen.sh
 
 %build
-%configure2_5x --with-forced-embedded-ffmpeg
+%configure2_5x \
+	--with-forced-embedded-ffmpeg
 
 %make
 
