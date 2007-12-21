@@ -12,6 +12,7 @@ Patch2:		xvidcap-1.1.5-nawk.patch
 URL:		http://xvidcap.sourceforge.net/
 License:	GPL
 Group:		Video
+BuildRoot:	%{_tmppath}/%{name}-buildroot
 BuildRequires:	docbook2x
 BuildRequires:	gtk2-devel jpeg-devel png-devel zlib-devel 
 BuildRequires:	libglade2.0-devel
