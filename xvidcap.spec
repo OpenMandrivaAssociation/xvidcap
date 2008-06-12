@@ -69,13 +69,17 @@ desktop-file-install --vendor="" \
 %clean
 rm -rf %{buildroot}
 
+%if %mdkversion < 200900
 %post
 %update_menus
 %update_scrollkeeper	
+%endif
 	
+%if %mdkversion < 200900
 %postun
 %clean_menus
 %clean_scrollkeeper
+%endif
 
 %files -f %{name}.lang
 %defattr(-,root,root)
