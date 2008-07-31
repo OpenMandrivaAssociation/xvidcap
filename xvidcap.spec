@@ -1,6 +1,6 @@
 %define name	xvidcap
 %define version	1.1.6
-%define release %mkrel 1
+%define release %mkrel 3
 
 Name:		%{name}
 Summary:	Screen capture video recorder
