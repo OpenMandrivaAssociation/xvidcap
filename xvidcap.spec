@@ -1,6 +1,11 @@
 %define name	xvidcap
 %define version	1.1.6
-%define release %mkrel 4
+%define release %mkrel 5
+%define build_plf 0
+%{?_with_plf: %{expand: %%global build_plf 1}}
+%if %build_plf
+%define distsuffix plf
+%endif
 
 Name:		%{name}
 Summary:	Screen capture video recorder
@@ -10,16 +15,22 @@ Source:		http://downloads.sourceforge.net/xvidcap/%{name}-%{version}.tar.bz2
 Patch0:		xvidcap-1.1.5-docbook.patch
 Patch2:		xvidcap-1.1.5-nawk.patch
 URL:		http://xvidcap.sourceforge.net/
-License:	GPL
+License:	GPLv2+
 Group:		Video
 BuildRoot:	%{_tmppath}/%{name}-buildroot
-BuildRequires:	docbook2x
+BuildRequires:	docbook-utils xmlto
 BuildRequires:	gtk2-devel jpeg-devel png-devel zlib-devel 
 BuildRequires:	libglade2.0-devel
 BuildRequires:	libxmu-devel
 BuildRequires:	desktop-file-utils
 BuildRequires:	scrollkeeper
-BuildRequires:	perl-XML-Parser
+BuildRequires:	intltool
+%if %build_plf
+BuildRequires: libfaac-devel libfaad2-devel
+BuildRequires: x264-devel >= 0.65
+BuildRequires: liblame-devel
+%endif
+
 Requires(post): scrollkeeper
 Requires(postun): scrollkeeper
 Requires:	mplayer
@@ -31,12 +42,17 @@ Requires:	imagemagick
 xvidcap is a screen capture enabling you to capture videos off your X-Window
 desktop for illustration or documentation purposes. It is intended to be a
 standards-based alternative to tools like Lotus ScreenCam.
+%if %build_plf
+
+This package is in PLF because it is linked with patented codecs.
+%endif
 
 %prep
 %setup -q
 %patch0 -p0 -b .docbook
 %patch2 -p0 -b .fixawk
 
+libtoolize --copy --force
 sh ./autogen.sh
 
 %build
