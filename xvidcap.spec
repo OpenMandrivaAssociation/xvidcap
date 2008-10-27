@@ -1,6 +1,6 @@
 %define name	xvidcap
-%define version	1.1.6
-%define release %mkrel 5
+%define version	1.1.7
+%define release %mkrel 1
 %define build_plf 0
 %{?_with_plf: %{expand: %%global build_plf 1}}
 %if %build_plf
@@ -11,9 +11,11 @@ Name:		%{name}
 Summary:	Screen capture video recorder
 Version:	%{version}
 Release:	%{release}
-Source:		http://downloads.sourceforge.net/xvidcap/%{name}-%{version}.tar.bz2
+Source:		http://downloads.sourceforge.net/xvidcap/%{name}-%{version}.tar.gz
 Patch0:		xvidcap-1.1.5-docbook.patch
+Patch1:		xvidcap-1.1.7-fix-headers.patch
 Patch2:		xvidcap-1.1.5-nawk.patch
+Patch3:		xvidcap-1.1.7-desktop-entry.patch
 URL:		http://xvidcap.sourceforge.net/
 License:	GPLv2+
 Group:		Video
@@ -21,8 +23,9 @@ BuildRoot:	%{_tmppath}/%{name}-buildroot
 BuildRequires:	docbook-utils xmlto
 BuildRequires:	gtk2-devel jpeg-devel png-devel zlib-devel 
 BuildRequires:	libglade2.0-devel
+BuildRequires:	libtheora-devel
 BuildRequires:	libxmu-devel
-BuildRequires:	desktop-file-utils
+BuildRequires:	dbus-glib-devel
 BuildRequires:	scrollkeeper
 BuildRequires:	intltool
 %if %build_plf
@@ -30,7 +33,7 @@ BuildRequires: libfaac-devel libfaad2-devel
 BuildRequires: x264-devel >= 0.65
 BuildRequires: liblame-devel
 %endif
-
+BuildConflicts: libffmpeg-devel
 Requires(post): scrollkeeper
 Requires(postun): scrollkeeper
 Requires:	mplayer
@@ -50,16 +53,18 @@ This package is in PLF because it is linked with patented codecs.
 %prep
 %setup -q
 %patch0 -p0 -b .docbook
+%patch1 -p1
 %patch2 -p0 -b .fixawk
+%patch3 -p1
 
-libtoolize --copy --force
-sh ./autogen.sh
+NOCONFIGURE=yes sh ./autogen.sh
+intltoolize --copy --force
 
 %build
-%configure2_5x \
-	--with-forced-embedded-ffmpeg
+%configure2_5x --disable-dependency-tracking \
+	       --enable-libtheora
 
-%make
+%make CPPFLAGS=-I`pwd`/ffmpeg
 
 %install
 rm -rf %{buildroot} %{name}.lang
@@ -74,11 +79,6 @@ rm -fr %{buildroot}/%{_docdir}
 for omf in %{buildroot}%{_datadir}/omf/*/*-??.omf;do
 echo "%lang($(basename $omf|sed -e s/.*-// -e s/.omf//)) $(echo $omf|sed s!%{buildroot}!!)" >> %{name}.lang
 done
-
-desktop-file-install --vendor="" \
-  --remove-category="Application" \
-  --add-category="X-MandrivaLinux-Multimedia-Video" \
-  --dir %{buildroot}%{_datadir}/applications %{buildroot}%{_datadir}/applications/*
 
 %find_lang %{name} --with-gnome
 
@@ -101,7 +101,9 @@ rm -rf %{buildroot}
 %defattr(-,root,root)
 %doc AUTHORS ChangeLog COPYING NEWS README
 %{_bindir}/%{name}
+%{_bindir}/xvidcap-dbus-client
 %{_bindir}/ppm2mpeg.sh
+%_datadir/dbus-1/services/net.jarre_de_the.Xvidcap.service
 %{_mandir}/man1/*
 %lang(de) %{_mandir}/de/man1/*
 %lang(es) %{_mandir}/es/man1/*
