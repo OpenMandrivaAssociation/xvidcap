@@ -57,13 +57,10 @@ This package is in PLF because it is linked with patented codecs.
 %patch2 -p0 -b .fixawk
 %patch3 -p1
 
-NOCONFIGURE=yes sh ./autogen.sh
+./autogen.sh --prefix=/usr
 intltoolize --copy --force
 
 %build
-%configure2_5x --disable-dependency-tracking \
-	       --enable-libtheora
-
 %make CPPFLAGS=-I`pwd`/ffmpeg
 
 %install
