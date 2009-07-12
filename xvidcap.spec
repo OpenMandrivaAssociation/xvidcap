@@ -7,6 +7,13 @@
 %define distsuffix plf
 %endif
 
+# Note that disabling these does not cause build failures, but
+# other output formats than xwd will be disabled
+# embedded ffmpeg vhook modules
+%define _disable_ld_no_undefined 1
+# FIXME: embedded ffmpeg
+%define _disable_ld_as_needed 1
+
 Name:		%{name}
 Summary:	Screen capture video recorder
 Version:	%{version}
@@ -16,6 +23,7 @@ Patch0:		xvidcap-1.1.5-docbook.patch
 Patch1:		xvidcap-1.1.7-fix-headers.patch
 Patch2:		xvidcap-1.1.5-nawk.patch
 Patch3:		xvidcap-1.1.7-desktop-entry.patch
+Patch4:		xvidcap-1.1.7-ffmpeg-options.patch
 URL:		http://xvidcap.sourceforge.net/
 License:	GPLv2+
 Group:		Video
@@ -56,11 +64,13 @@ This package is in PLF because it is linked with patented codecs.
 %patch1 -p1
 %patch2 -p0 -b .fixawk
 %patch3 -p1
+%patch4 -p1
 
-./autogen.sh --prefix=/usr
+NOCONFIGURE=yes sh ./autogen.sh
 intltoolize --copy --force
 
 %build
+%configure2_5x --disable-dependency-tracking --enable-libtheora
 %make CPPFLAGS=-I`pwd`/ffmpeg
 
 %install
