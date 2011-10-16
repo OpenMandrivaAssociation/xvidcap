@@ -1,6 +1,3 @@
-%define name	xvidcap
-%define version	1.1.7
-%define release %mkrel 2
 %define build_plf 0
 %{?_with_plf: %{expand: %%global build_plf 1}}
 %if %build_plf
@@ -14,22 +11,26 @@
 # FIXME: embedded ffmpeg
 %define _disable_ld_as_needed 1
 
-Name:		%{name}
+Name:		xvidcap
 Summary:	Screen capture video recorder
-Version:	%{version}
-Release:	%{release}
+Version:	1.1.7
+Release:	3
 Source:		http://downloads.sourceforge.net/xvidcap/%{name}-%{version}.tar.gz
 Patch0:		xvidcap-1.1.5-docbook.patch
 Patch1:		xvidcap-1.1.7-fix-headers.patch
 Patch2:		xvidcap-1.1.5-nawk.patch
 Patch3:		xvidcap-1.1.7-desktop-entry.patch
 Patch4:		xvidcap-1.1.7-ffmpeg-options.patch
+Patch5:		xvidcap-1.1.7-shmstr.patch
 URL:		http://xvidcap.sourceforge.net/
 License:	GPLv2+
 Group:		Video
-BuildRoot:	%{_tmppath}/%{name}-buildroot
+
 BuildRequires:	docbook-utils xmlto
-BuildRequires:	gtk2-devel jpeg-devel png-devel zlib-devel 
+BuildRequires:	gtk2-devel 
+BuildRequires:	jpeg-devel
+BuildRequires:	libpng-devel
+BuildRequires:	zlib-devel 
 BuildRequires:	libglade2.0-devel
 BuildRequires:	libtheora-devel
 BuildRequires:	libxmu-devel
@@ -65,6 +66,7 @@ This package is in PLF because it is linked with patented codecs.
 %patch2 -p0 -b .fixawk
 %patch3 -p1
 %patch4 -p1
+%patch5 -p0
 
 NOCONFIGURE=yes sh ./autogen.sh
 intltoolize --copy --force
