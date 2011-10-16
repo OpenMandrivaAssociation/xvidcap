@@ -30,6 +30,7 @@ BuildRequires:	docbook-utils xmlto
 BuildRequires:	gtk2-devel 
 BuildRequires:	jpeg-devel
 BuildRequires:	libpng-devel
+BuildRequires:	libx11-devel 
 BuildRequires:	zlib-devel 
 BuildRequires:	libglade2.0-devel
 BuildRequires:	libtheora-devel
