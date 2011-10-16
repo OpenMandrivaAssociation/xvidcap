@@ -73,7 +73,7 @@ NOCONFIGURE=yes sh ./autogen.sh
 intltoolize --copy --force
 
 %build
-%configure2_5x --disable-dependency-tracking --enable-libtheora LIBS="-lX11 -lz"
+%configure2_5x --disable-dependency-tracking --enable-libtheora LIBS="-lX11 -lz -lXext"
 %make CPPFLAGS=-I`pwd`/ffmpeg
 
 %install
