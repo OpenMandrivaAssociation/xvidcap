@@ -1,0 +1,18 @@
+diff -p -up xvidcap-1.1.7/xvidcap.desktop~ xvidcap-1.1.7/xvidcap.desktop
+--- xvidcap-1.1.7/xvidcap.desktop~	2006-09-19 08:55:21.000000000 +0200
++++ xvidcap-1.1.7/xvidcap.desktop	2008-10-27 11:17:29.000000000 +0100
+@@ -1,12 +1,11 @@
+ [Desktop Entry]
+ Type=Application
+-Encoding=UTF-8
+ Name=XVidCap Screen Capture
+ GenericName=X11 Screencam
+ Comment=X11 Screencam
+ Comment[de]=X11 Videoaufnahme
+-Icon=xvidcap.png
++Icon=xvidcap
+ TryExec=xvidcap
+ Exec=xvidcap
+ Terminal=false
+-Categories=GTK;Application;AudioVideo;Video;
++Categories=GTK;AudioVideo;Video;
