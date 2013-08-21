@@ -1,0 +1,12 @@
+diff -Naur xvidcap-1.1.7.orig/configure.in xvidcap-1.1.7/configure.in
+--- xvidcap-1.1.7.orig/configure.in	2013-08-21 13:47:57.730948174 +0400
++++ xvidcap-1.1.7/configure.in	2013-08-21 13:49:08.333945120 +0400
+@@ -68,7 +68,7 @@
+ AC_SUBST(GETTEXT_PACKAGE)
+ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [GETTEXT package name])
+ 
+-ALL_LINGUAS="de en it es"
++ALL_LINGUAS="de en it es ru"
+ AM_GLIB_GNU_GETTEXT
+ #########################################################
+ #########################################################

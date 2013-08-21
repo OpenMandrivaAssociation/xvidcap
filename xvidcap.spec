@@ -21,11 +21,12 @@
 Name:		xvidcap
 Summary:	Screen capture video recorder
 Version:	1.1.7
-Release:	4%{?extrarelsuffix}
+Release:	5%{?extrarelsuffix}
 License:	GPLv2+
 Group:		Video
 URL:		http://xvidcap.sourceforge.net/
-Source:		http://downloads.sourceforge.net/xvidcap/%{name}-%{version}.tar.gz
+Source0:	http://downloads.sourceforge.net/xvidcap/%{name}-%{version}.tar.gz
+Source1:	xvidcap_ru.po
 Patch0:		xvidcap-1.1.5-docbook.patch
 Patch1:		xvidcap-1.1.7-fix-headers.patch
 Patch2:		xvidcap-1.1.5-nawk.patch
@@ -33,6 +34,7 @@ Patch3:		xvidcap-1.1.7-desktop-entry.patch
 Patch4:		xvidcap-1.1.7-ffmpeg-options.patch
 Patch5:		xvidcap-1.1.7-shmstr.patch
 Patch6:		xvidcap-1.1.7-glib.patch
+Patch7:		xvidcap-1.1.7-add-ru-localization.patch
 
 BuildRequires:	docbook-utils
 BuildRequires:	intltool
@@ -72,6 +74,7 @@ This package is in Restricted reporitory as it is linked with patented codecs.
 
 %prep
 %setup -q
+cp -p %{SOURCE1} po/ru.po
 %patch0 -p0 -b .docbook
 %patch1 -p1
 %patch2 -p0 -b .fixawk
@@ -79,6 +82,7 @@ This package is in Restricted reporitory as it is linked with patented codecs.
 %patch4 -p1
 %patch5 -p0
 %patch6 -p1
+%patch7 -p1
 
 NOCONFIGURE=yes sh ./autogen.sh
 intltoolize --copy --force
