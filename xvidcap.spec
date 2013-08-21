@@ -41,6 +41,7 @@ BuildRequires:	intltool
 BuildRequires:	scrollkeeper
 BuildRequires:	xmlto
 BuildRequires:	jpeg-devel
+BuildRequires:  gettext
 BuildRequires:	pkgconfig(dbus-glib-1)
 BuildRequires:	pkgconfig(gtk+-2.0)
 BuildRequires:	pkgconfig(libglade-2.0)
@@ -82,9 +83,14 @@ cp -p %{SOURCE1} po/ru.po
 %patch4 -p1
 %patch5 -p0
 %patch6 -p1
-%patch7 -p1
+%patch7 -p1 -b .ru_po
 
-NOCONFIGURE=yes sh ./autogen.sh
+aclocal
+autoheader
+autoconf
+automake
+cp configure.ac configure.in
+# NOCONFIGURE=yes sh ./autogen.sh
 intltoolize --copy --force
 
 %build
