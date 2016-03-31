@@ -21,7 +21,7 @@
 Name:		xvidcap
 Summary:	Screen capture video recorder
 Version:	1.1.7
-Release:	5%{?extrarelsuffix}
+Release:	6%{?extrarelsuffix}
 License:	GPLv2+
 Group:		Video
 URL:		http://xvidcap.sourceforge.net/
