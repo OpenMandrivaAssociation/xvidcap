@@ -35,6 +35,7 @@ Patch4:		xvidcap-1.1.7-ffmpeg-options.patch
 Patch5:		xvidcap-1.1.7-shmstr.patch
 Patch6:		xvidcap-1.1.7-glib.patch
 Patch7:		xvidcap-1.1.7-add-ru-localization.patch
+Patch8:		xvidcap-1.1.7-automake-1.13.patch
 
 BuildRequires:	docbook-utils
 BuildRequires:	intltool
@@ -84,11 +85,12 @@ cp -p %{SOURCE1} po/ru.po
 %patch5 -p0
 %patch6 -p1
 %patch7 -p1 -b .ru_po
+%patch8 -p0
 
 aclocal
 autoheader
 autoconf
-automake
+automake --add-missing
 cp configure.ac configure.in
 # NOCONFIGURE=yes sh ./autogen.sh
 intltoolize --copy --force
