@@ -24,7 +24,7 @@ Version:	1.1.7
 Release:	6%{?extrarelsuffix}
 License:	GPLv2+
 Group:		Video
-URL:		http://xvidcap.sourceforge.net/
+URL:		https://xvidcap.sourceforge.net/
 Source0:	http://downloads.sourceforge.net/xvidcap/%{name}-%{version}.tar.gz
 Source1:	xvidcap_ru.po
 Patch0:		xvidcap-1.1.5-docbook.patch
